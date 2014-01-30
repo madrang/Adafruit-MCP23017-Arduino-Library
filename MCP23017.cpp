@@ -16,7 +16,7 @@
 
 #include <Wire.h>
 #include <avr/pgmspace.h>
-#include "Adafruit_MCP23017.h"
+#include "MCP23017.h"
 
 #if ARDUINO >= 100
  #include "Arduino.h"
