@@ -30,6 +30,8 @@ public:
 
   void writeGPIOAB(uint16_t);
   uint16_t readGPIOAB();
+  
+  uint8_t address();
 
  private:
   uint8_t i2caddr;
@@ -50,7 +52,6 @@ public:
 #define MCP23017_INTCAPA 0x10
 #define MCP23017_GPIOA 0x12
 #define MCP23017_OLATA 0x14
-
 
 #define MCP23017_IODIRB 0x01
 #define MCP23017_IPOLB 0x03

@@ -240,3 +240,7 @@ uint8_t MCP23017::digitalRead(uint8_t p) {
   Wire.requestFrom(i2caddr, 1);
   return (wirerecv() >> p) & 0x1;
 }
+
+uint8_t MCP23017::address(void) {
+  return i2caddr;
+}
