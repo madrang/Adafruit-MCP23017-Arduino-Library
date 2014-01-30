@@ -14,11 +14,11 @@
   BSD license, all text above must be included in any redistribution
  ****************************************************/
 
-#ifndef _Adafruit_MCP23017_H_
-#define _Adafruit_MCP23017_H_
+#ifndef _MCP23017_H_
+#define _MCP23017_H_
 
 // Don't forget the Wire library
-class Adafruit_MCP23017 {
+class MCP23017 {
 public:
   void begin(uint8_t addr);
   void begin(void);

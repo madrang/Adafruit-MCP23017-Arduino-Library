@@ -43,7 +43,7 @@ static inline uint8_t wirerecv(void) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void Adafruit_MCP23017::begin(uint8_t addr) {
+void MCP23017::begin(uint8_t addr) {
   if (addr > 7) {
     addr = 7;
   }
@@ -53,23 +53,36 @@ void Adafruit_MCP23017::begin(uint8_t addr) {
 
   
   // set defaults!
-  Wire.beginTransmission(MCP23017_ADDRESS | i2caddr);
+  Wire.beginTransmission(i2caddr);
   wiresend(MCP23017_IODIRA);
   wiresend(0xFF);  // all inputs on port A
   Wire.endTransmission();
 
-  Wire.beginTransmission(MCP23017_ADDRESS | i2caddr);
+  Wire.beginTransmission(i2caddr);
   wiresend(MCP23017_IODIRB);
   wiresend(0xFF);  // all inputs on port B
   Wire.endTransmission();
 }
 
+void MCP23017::begin(bool A0, bool A1, bool A2) {
+  byte addr = 0;
+  if(A0) {
+    addr |= 1 << 0;
+  }
+  if(A1) {
+    addr |= 1 << 1;
+  }
+  if(A2) {
+    addr |= 1 << 2;
+  }
+  begin(addr);
+}
 
-void Adafruit_MCP23017::begin(void) {
+void MCP23017::begin(void) {
   begin(0);
 }
 
-void Adafruit_MCP23017::pinMode(uint8_t p, uint8_t d) {
+void MCP23017::pinMode(uint8_t p, uint8_t d) {
   uint8_t iodir;
   uint8_t iodiraddr;
 
@@ -106,7 +119,7 @@ void Adafruit_MCP23017::pinMode(uint8_t p, uint8_t d) {
   Wire.endTransmission();
 }
 
-uint16_t Adafruit_MCP23017::readGPIOAB() {
+uint16_t MCP23017::readGPIOAB() {
   uint16_t ba = 0;
   uint8_t a;
 
@@ -124,7 +137,7 @@ uint16_t Adafruit_MCP23017::readGPIOAB() {
   return ba;
 }
 
-void Adafruit_MCP23017::writeGPIOAB(uint16_t ba) {
+void MCP23017::writeGPIOAB(uint16_t ba) {
   Wire.beginTransmission(MCP23017_ADDRESS | i2caddr);
   wiresend(MCP23017_GPIOA);	
   wiresend(ba & 0xFF);
@@ -132,7 +145,7 @@ void Adafruit_MCP23017::writeGPIOAB(uint16_t ba) {
   Wire.endTransmission();
 }
 
-void Adafruit_MCP23017::digitalWrite(uint8_t p, uint8_t d) {
+void MCP23017::digitalWrite(uint8_t p, uint8_t d) {
   uint8_t gpio;
   uint8_t gpioaddr, olataddr;
 
@@ -171,7 +184,7 @@ void Adafruit_MCP23017::digitalWrite(uint8_t p, uint8_t d) {
   Wire.endTransmission();
 }
 
-void Adafruit_MCP23017::pullUp(uint8_t p, uint8_t d) {
+void MCP23017::pullUp(uint8_t p, uint8_t d) {
   uint8_t gppu;
   uint8_t gppuaddr;
 
@@ -209,7 +222,7 @@ void Adafruit_MCP23017::pullUp(uint8_t p, uint8_t d) {
   Wire.endTransmission();
 }
 
-uint8_t Adafruit_MCP23017::digitalRead(uint8_t p) {
+uint8_t MCP23017::digitalRead(uint8_t p) {
   uint8_t gpioaddr;
 
   // only 16 bits!
