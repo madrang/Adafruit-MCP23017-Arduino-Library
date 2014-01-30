@@ -44,13 +44,9 @@ static inline uint8_t wirerecv(void) {
 ////////////////////////////////////////////////////////////////////////////////
 
 void MCP23017::begin(uint8_t addr) {
-  if (addr > 7) {
-    addr = 7;
-  }
-  i2caddr = addr;
+  i2caddr = (addr & MCP23017_ADDRES_Msk) | MCP23017_ADDRESS;
 
   Wire.begin();
-
   
   // set defaults!
   Wire.beginTransmission(i2caddr);
@@ -98,11 +94,11 @@ void MCP23017::pinMode(uint8_t p, uint8_t d) {
   }
 
   // read the current IODIR
-  Wire.beginTransmission(MCP23017_ADDRESS | i2caddr);
+  Wire.beginTransmission(i2caddr);
   wiresend(iodiraddr);	
   Wire.endTransmission();
   
-  Wire.requestFrom(MCP23017_ADDRESS | i2caddr, 1);
+  Wire.requestFrom(i2caddr, 1);
   iodir = wirerecv();
 
   // set the pin and direction
@@ -113,7 +109,7 @@ void MCP23017::pinMode(uint8_t p, uint8_t d) {
   }
 
   // write the new IODIR
-  Wire.beginTransmission(MCP23017_ADDRESS | i2caddr);
+  Wire.beginTransmission(i2caddr);
   wiresend(iodiraddr);
   wiresend(iodir);	
   Wire.endTransmission();
@@ -124,11 +120,11 @@ uint16_t MCP23017::readGPIOAB() {
   uint8_t a;
 
   // read the current GPIO output latches
-  Wire.beginTransmission(MCP23017_ADDRESS | i2caddr);
+  Wire.beginTransmission(i2caddr);
   wiresend(MCP23017_GPIOA);	
   Wire.endTransmission();
   
-  Wire.requestFrom(MCP23017_ADDRESS | i2caddr, 2);
+  Wire.requestFrom(i2caddr, 2);
   a = wirerecv();
   ba = wirerecv();
   ba <<= 8;
@@ -138,7 +134,7 @@ uint16_t MCP23017::readGPIOAB() {
 }
 
 void MCP23017::writeGPIOAB(uint16_t ba) {
-  Wire.beginTransmission(MCP23017_ADDRESS | i2caddr);
+  Wire.beginTransmission(i2caddr);
   wiresend(MCP23017_GPIOA);	
   wiresend(ba & 0xFF);
   wiresend(ba >> 8);
@@ -163,11 +159,11 @@ void MCP23017::digitalWrite(uint8_t p, uint8_t d) {
   }
 
   // read the current GPIO output latches
-  Wire.beginTransmission(MCP23017_ADDRESS | i2caddr);
+  Wire.beginTransmission(i2caddr);
   wiresend(olataddr);	
   Wire.endTransmission();
   
-  Wire.requestFrom(MCP23017_ADDRESS | i2caddr, 1);
+  Wire.requestFrom(i2caddr, 1);
    gpio = wirerecv();
 
   // set the pin and direction
@@ -178,7 +174,7 @@ void MCP23017::digitalWrite(uint8_t p, uint8_t d) {
   }
 
   // write the new GPIO
-  Wire.beginTransmission(MCP23017_ADDRESS | i2caddr);
+  Wire.beginTransmission(i2caddr);
   wiresend(gpioaddr);
   wiresend(gpio);	
   Wire.endTransmission();
@@ -201,11 +197,11 @@ void MCP23017::pullUp(uint8_t p, uint8_t d) {
 
 
   // read the current pullup resistor set
-  Wire.beginTransmission(MCP23017_ADDRESS | i2caddr);
+  Wire.beginTransmission(i2caddr);
   wiresend(gppuaddr);	
   Wire.endTransmission();
   
-  Wire.requestFrom(MCP23017_ADDRESS | i2caddr, 1);
+  Wire.requestFrom(i2caddr, 1);
   gppu = wirerecv();
 
   // set the pin and direction
@@ -216,7 +212,7 @@ void MCP23017::pullUp(uint8_t p, uint8_t d) {
   }
 
   // write the new GPIO
-  Wire.beginTransmission(MCP23017_ADDRESS | i2caddr);
+  Wire.beginTransmission(i2caddr);
   wiresend(gppuaddr);
   wiresend(gppu);	
   Wire.endTransmission();
@@ -237,10 +233,10 @@ uint8_t MCP23017::digitalRead(uint8_t p) {
   }
 
   // read the current GPIO
-  Wire.beginTransmission(MCP23017_ADDRESS | i2caddr);
+  Wire.beginTransmission(i2caddr);
   wiresend(gpioaddr);	
   Wire.endTransmission();
   
-  Wire.requestFrom(MCP23017_ADDRESS | i2caddr, 1);
+  Wire.requestFrom(i2caddr, 1);
   return (wirerecv() >> p) & 0x1;
 }

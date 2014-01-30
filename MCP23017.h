@@ -36,6 +36,7 @@ public:
 };
 
 #define MCP23017_ADDRESS 0x20
+#define MCP23017_ADDRES_Msk 0x27
 
 // registers
 #define MCP23017_IODIRA 0x00
