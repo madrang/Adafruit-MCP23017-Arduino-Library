@@ -22,6 +22,7 @@ class MCP23017 {
 public:
   void begin(uint8_t addr);
   void begin(void);
+  void begin(bool A0, bool A1, bool A2);
 
   void pinMode(uint8_t p, uint8_t d);
   void digitalWrite(uint8_t p, uint8_t d);

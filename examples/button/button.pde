@@ -1,5 +1,5 @@
 #include <Wire.h>
-#include "Adafruit_MCP23017.h"
+#include "MCP23017.h"
 
 // Basic pin reading and pullup test for the MCP23017 I/O expander
 // public domain!
